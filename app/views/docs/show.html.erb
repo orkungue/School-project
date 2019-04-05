@@ -1,0 +1,27 @@
+<html>
+
+<head>
+</head>
+<body>
+<div class="show_content_overall">
+<% if !@doc_id.blank? %>
+<div class="show_file_content_doc_header"><%= @doc_id.doc_headline %></div>
+<div class="show_content" id="show_content">
+<input type="hidden" name="doc_id" id="doc_id" value="<%= @doc_id.id %>">
+<%=
+@doc_id.doc_content.html_safe
+ %>
+</div>
+<% else %>
+<div class="show_file_content_doc_header"><%= params[:doc_headline] %></div>
+<div class="show_content" id="show_content">
+<input type="hidden" name="doc_id" id="doc_id" value="<%= params[:id] %>">
+<%=
+params[:doc_content].html_safe
+ %>
+</div>
+
+<% end %>
+</div>
+</body>
+</html>

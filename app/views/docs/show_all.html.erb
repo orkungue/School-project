@@ -1,0 +1,70 @@
+<html>
+
+<head>
+  <link href="/stylesheets/show_all.css" rel="stylesheet">
+</head>
+<body>
+<div class="show_content_overall" style="width: 70%; margin: 0 auto;">
+<div class="show_content">
+<%
+
+current_user = User.find(session[:current_user])
+class_docs = ClassDoc.all.where(:class_id => current_user.class_id)
+doc_type = DocType.find_by_doc_name(params[:document_subject])
+doc_group = DocGroup.find(params[:doc_type])
+docs = []
+
+if doc_group.id == 1
+   docs = Doc.all.where(:user_id => current_user.id).where(:doc_type_id => doc_type)
+else
+ if !class_docs.blank?
+   #class_docs.each {| x | docs << Doc.find_by_doc_type_id_and_doc_group_id_and_id(doc_type.id, params[:doc_type], x.doc_id)  }
+   docs = Doc.all.where(:doc_type_id => doc_type.id).where(:doc_group_id => doc_group.id)
+   #docs = Doc.find_all_by_doc_type_id_and_doc_group_id(doc_type.id, doc_group.id)
+  end
+end
+
+%>
+<section>
+  <% if docs.blank? %>
+  <ul id="list" class="List">
+    <li>Keine Einträge Vorhanden, zum erstellen Hier klicken</li>
+  </ul>
+  <% else %>
+    <input type="text" id="filter" placeholder="Filtern" />
+    <ul id="list" class="List">
+      <%
+        docs.each { |x|
+      %>
+        <li value="<%= x.id %>"><span class="doc_filter_header"><%= x.doc_headline.to_s rescue nil %></span><span style="float: right;"><%= x.created_at rescue nil  %></span></li>
+      <% } %>
+    </ul>
+  <% end %>
+</section>
+
+</div>
+</div>
+
+<script>
+  var filter = document.getElementById('filter');
+  var list = document.getElementById('list');
+  var listItems = list.querySelectorAll('li');
+  //filter.focus();
+  filter.addEventListener('keyup', function(e) {
+    var val = new RegExp(e.target.value, 'gi');
+    for(var i=0; i<listItems.length; i++) {
+    if( e.target.value.length > 0) {
+      var text = listItems[i].innerHTML;
+      if( !text.match(val)) {
+        listItems[i].classList.add('is-hidden');
+      } else {
+        listItems[i].classList.remove('is-hidden');
+      }
+    } else {
+      listItems[i].classList.remove('is-hidden');
+    }
+  }
+});
+</script>
+</body>
+</html>

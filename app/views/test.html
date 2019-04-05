@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="msapplication-tap-highlight" content="no">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css" />
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+<style>
+svg:not(:root),
+svg {
+  display: block;
+  overflow:auto;
+}
+
+.no-pad {
+  padding: 0 !important;
+}
+
+.dropdown-content {
+  overflow-x:visible !important;
+  overflow-y:scroll;
+  background-color: #e5e5e5 !important;
+  margin-top: -4px !important;
+  height:inherit;
+  max-height:50vh !important;
+}
+
+.dropdown-content.sub-menu {
+  margin-top: -0.3rem;
+}
+
+.select-dropdown li.optgroup:not(:first-child),
+.dropdown-content li.optgroup:not(:first-child) {
+  height:42px;
+  line-height:42px;
+  max-height:42px;
+  min-height:42px;
+  border-top:1px solid rgba(0,0,0,0.27) !important;
+}
+
+.dropdown-content li.optgroup>span{
+  padding:.5rem .75rem;
+  height:24px;
+  line-height:2rem;
+}
+
+.button-collapse {
+  width: 64px;
+  text-align: -webkit-center;
+}
+
+a.button-collapse:hover {
+  background: rgba(0, 0, 0, 0.13);
+  border-radius: 50%;
+}
+
+
+.hidden {
+  display:none;
+}
+</style>
+  <!--NVD3/D3/Morris-->
+  <!--
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.4/nv.d3.css" rel="stylesheet" type="text/css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.4/nv.d3.js"></script>
+-->
+
+</head>
+
+<body>
+
+  <div class="content">
+    <!-- START main content -->
+    <div class="row">
+
+      <div class="col s4">
+          <div class="input-field">
+            <select class="rt-select multi" id="us_divisions" multiple="multiple">
+              <optgroup label="East North Central">
+                <option id="illinois">Illinois</option>
+                <option id="indiana">Indiana</option>
+                <option id="michigan">Michigan</option>
+                <option id="ohio">Ohio</option>
+                <option id="wisconsin">Wisconsin</option>
+              </optgroup>
+              <optgroup label="East South Central">
+                <option id="alabama">Alabama</option>
+                <option id="kentucky">Kentucky</option>
+                <option id="mississippi">Mississippi</option>
+                <option id="tennessee">Tennessee</option>
+              </optgroup>
+              <optgroup label="Middle Atlantic">
+                <option id="new_jersey">New Jersey</option>
+                <option id="new_york">New York</option>
+                <option id="pennsylvania">Pennsylvania</option>
+              </optgroup>
+              <optgroup label="Mountain">
+                <option id="arizona">Arizona</option>
+                <option id="colorado">Colorado</option>
+                <option id="idaho">Idaho</option>
+                <option id="montana">Montana</option>
+                <option id="nevada">Nevada</option>
+                <option id="new_mexico">New Mexico</option>
+                <option id="utah">Utah</option>
+                <option id="wyoming">Wyoming</option>
+              </optgroup>
+              <optgroup label="New England">
+                <option id="connecticut">Connecticut</option>
+                <option id="maine">Maine</option>
+                <option id="massachusetts">Massachusetts</option>
+                <option id="new_hampshire">New Hampshire</option>
+                <option id="rhode_island">Rhode Island</option>
+                <option id="vermont">Vermont</option>
+              </optgroup>
+              <optgroup label="Pacific">
+                <option id="alaska">Alaska</option>
+                <option id="california">California</option>
+                <option id="hawaii">Hawaii</option>
+                <option id="oregon">Oregon</option>
+                <option id="washington">Washington</option>
+              </optgroup>
+              <optgroup label="South Atlantic">
+                <option id="delaware">Delaware</option>
+                <option id="florida">Florida</option>
+                <option id="georgia">Georgia</option>
+                <option id="maryland">Maryland</option>
+                <option id="north_carolina">North Carolina</option>
+                <option id="south_carolina">South Carolina</option>
+                <option id="virginia">Virginia</option>
+                <option id="west_virginia">West Virginia</option>
+              </optgroup>
+              <optgroup label="West North Central">
+                <option id="iowa">Iowa</option>
+                <option id="kansas">Kansas</option>
+                <option id="minnesota">Minnesota</option>
+                <option id="missouri">Missouri</option>
+                <option id="nebraska">Nebraska</option>
+                <option id="north_dakota">North Dakota</option>
+                <option id="south_dakota">South Dakota</option>
+              </optgroup>
+              <optgroup label="West South Central">
+                <option id="arkansas">Arkansas</option>
+                <option id="louisiana">Louisiana</option>
+                <option id="oklahoma">Oklahoma</option>
+                <option id="texas">Texas</option>
+              </optgroup>
+            </select>
+            <label>States</label>
+          </div>
+      </div>
+    </div>
+  </div>
+<script>
+$(document).ready(function() {
+  $('ul.tabs').tabs();
+  $('.rt-select').material_select();
+  $('.rt-sidebar').on('click', function() {
+    $("a").removeClass("active");
+    // add class to the one we clicked
+    $(this).addClass("active");
+    var which_in = $(this).attr('id');
+    var val_is = $('#' + which_in);
+
+    // var outJson = {
+    // id : which_in,
+    //   state_val : val_is
+    // }
+    // var This = JSON.stringify(outJson);
+    //$('li a.active').toggleClass('active');
+
+    $('#show').text('#' + which_in);
+    $('ul.tabs').tabs('select_tab', 'test_' + which_in);
+  });
+  $('td').click(function() {
+    var colIndex = $(this).parent().children().index($(this));
+    var rowIndex = $(this).parent().parent().children().index($(this).parent());
+    alert('Row: ' + rowIndex + ', Column: ' + colIndex);
+  });
+  
+ 
+  // Multiple Selects
+ 
+  
+   $('.rt-select .multi').on('change', function(){
+     var foo = []; 
+    var sel_id = $(this).attr('id');
+     
+    $('#' + sel_id +' :selected').each(function(i, selected){ 
+      foo[i] = $(selected).text(); 
+    });
+    $('#show').text(foo);
+  })
+  
+});
+</script>
+  <!-- END main content -->
+
+</body>
+
+</html>

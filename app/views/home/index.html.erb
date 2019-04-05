@@ -1,0 +1,578 @@
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/stylesheets/style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<% if current_user %>
+  <%
+  users_class =	ClassGroup.find(current_user.class_id)
+  session[:current_user] = current_user.id
+	user_type = UserType.find(current_user.user_type_id)
+	create_content =	Setup.find_by_class_id(current_user.class_id) rescue nil
+  %>
+<% else %>
+  <%= link_to "Sign Up", signup_path %> or
+  <%= link_to "Log In", login_path %>
+<% end %>
+<a href="#" id="menu">&equiv;</a>
+<nav>
+  <a href="#a1" id="p1" rel="i1" class="current">Meine Fächer</a> / <a href="#a2" rel="i2"
+    id="p2">Stundenplan</a> / <a href="#a3" id="p3" rel="i3">Notenübersicht</a> / <a href="#a4" id="p4" rel="i4">Terminkalendar</a>
+</nav>
+<section>
+  <div id="i1" class="page">
+    <div>
+      <div class="page_content_header">Meine Fächer</div>
+      <div class="page_content">
+        <div id="modal">
+          <div class="page_content_header" id="page_content_header"></div>
+          <div class="page_content_subject">
+            <img src="/images/main/new_document.png" alt="Neues Dokument erstellen"
+              title="Neues Dokument erstellen" class="doc_create_new"> <img
+              src="/images/main/private_saved_data.png"
+              alt="Meine gespeicherten Dokumente anzeigen" id="1" name=""
+              title="Gespeicherte Dokumente anzeigen" class="doc_view_own"> <img
+              src="/images/main/templates.png" alt="Vorlagen" title="Vorlagen" id="2"
+              class="doc_view_templates doc_view_own">
+          </div>
+        </div>
+        <div class="subject_content">
+
+          <% if user_type.id == 2 %>
+          <div class="application_settings application_settings_main">
+            <div class="button-edit-application" style="display: block;"><img src="/images/main/edit-button.png"></div>
+            <div class="button-save-application" style="display: none;"><img src="/images/main/save-button.png"></div>
+            <input type="hidden" name="edit_active" id="edit_active"
+              value="false">
+          </div>
+          <% end %>
+          <section class="subject_boxes_container">
+            <% if create_content.blank? %>
+            <img src="/images/main/Deutsch.png" id="Deutsch" class="box" alt="Deutsch" showit="false">
+            <img src="/images/main/Englisch.png" id="Englisch" alt="Englisch" class="box" showit="false">
+            <img src="/images/main/Franzoesisch.png" id="Französisch" alt="Französisch" class="box" showit="true">
+            <img src="/images/main/Biologie.png" id="Biologie" alt="Biologie" class="box" showit="true">
+            <img src="/images/main/Chemie.png" id="Chemie" alt="Chemie" class="box" showit="true">
+            <img src="/images/main/Geographie.png" id="Geographie" alt="Geographie" class="box" showit="true">
+            <img src="/images/main/Geschichte.png" id="Geschichte" alt="Geschichte" class="box" showit="true">
+            <img src="/images/main/Informatik.png" id="Informatik" alt="Informatik" class="box" showit="true">
+            <img src="/images/main/Kunst.png" id="Kunst" alt="Kunst" class="box" showit="true">
+            <img src="/images/main/Latein.png" id="Latein" alt="Latein" class="box" showit="true">
+            <img src="/images/main/Mathe.png" id="Mathe" alt="Mathe" class="box" showit="true">
+            <img src="/images/main/Musik.png" id="Musik" alt="Musik" class="box" showit="true">
+            <img src="/images/main/Physik.png" id="Physik" alt="Physik" class="box" showit="true">
+            <img src="/images/main/Religion.png" id="Religion" alt="Religion" class="box" showit="true">
+            <img src="/images/main/Sozialkunde.png" id="Sozialkunde" alt="Sozialkunde" class="box" showit="true">
+            <img src="/images/main/Spanisch.png" id="Spanisch" alt="Spanisch" class="box" showit="true">
+            <!-- <div id="box-1" class="box"></div> <div id="box-2" class="box"></div> <div id="box-3" class="box"></div> -->
+            <% else %>
+              <%= create_content.enabled_apps.html_safe %>
+            <% end %>
+          </section>
+        </div>
+
+        <div id="choosed_group_options">
+          <div id="choosed_group_options_new" style="display: none;">
+            <div style="visibility: hidden;" id="page_content_header"></div>
+            <div class="button-back"><img src="/images/main/back-button.png"></div>
+            <div class="new_file_content"></div>
+            <div class="new_file_content_classes"></div>
+          </div>
+            <!--  Show File  -->
+          <div class="show_file_content_over" id="show_file_content_over" style="display: none; ">
+              <div class="button-back"><img src="/images/main/back-button.png"></div>
+              <div style="display: flex; margin: 0 auto; width: 80%; height: 100%;">
+                <div class="show_file_content" style="display: none; flex: 10;"><div class="show_file_content_doc_header"></div></div>
+                <div style="margin-top: 5%;">
+                  <div class="button-edit"><img height="80" width="100" src="/images/main/edit-button.png"></div>
+                  <input type="button" value="Fullscreen" id="Fullscreen_it" onclick="toggleFullScreen(document.getElementById('show_content'))" />
+                </div>
+              </div>
+            </div>
+          <div id="choosed_group_options_template" style="display: none;">
+            <div class="button-back"><img src="/images/main/back-button.png"></div>
+            <div class="show_template_content">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="i2" class="page">
+     <div>
+       <div class="page_content_header">Stundenplan</div>
+       <div class="tt_wrapper" style="width: 80%;"></div>
+
+     </div>
+  </div>
+  <% if user_type.id == 3 %>
+  <div id="i3" class="page">
+    <div>
+      <div class="page_content_header">Notenübersicht</div>
+      <div class="n_wrapper" style="width: 80%;"></div>
+    </div>
+  </div>
+  <% elsif user_type.id == 2 %>
+  <div id="i3" class="page">
+    <div>
+      <div class="page_content_header">Notenübersicht Klasse</div>
+      <div class="n_wrapper" style="width: 80%;"></div>
+    </div>
+  </div>
+  <% end %>
+
+  <div id="i4" class="page">
+    <div>
+      <div class="page_content_header">Terminkalendar</div>
+      <div style="width: 80%;">
+        <div id="calendar"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+
+$(document).ready(function(event) {
+  $("#menu").trigger('click');
+  $("#menu").trigger('click');
+   $(".tt_wrapper").load("/timetables");
+   $(".n_wrapper").load("/notes");
+  $(".show_template_content").on("click", "li", function(e) {
+    e.preventDefault();
+    var choosed_doc = $(this).attr("value");
+    var user_id = "<%=escape_javascript(session[:current_user].to_s) %>";
+    $('.show_template_content').empty();
+    $.ajax({
+      url:'/doc/show',
+      data:{ choosed_doc: choosed_doc, user_id: user_id},
+      type:"GET",
+      success:function(data){
+        $(".show_file_content_over").show();
+        $(".show_file_content").show();
+        $(".show_file_content").append(data);
+      }, error: function(XMLHttpRequest, textStatus, errorThrown) {
+      }
+    });
+  });
+});
+
+  $('.button-close').on("click", function(e) {
+    e.preventDefault();
+    $('#modal').removeClass("active");
+  });
+
+
+  $('.show_file_content_over').on("click", ".button-edit", function(e) {
+  e.preventDefault();
+  $("button-edit").hide();
+  if ($('#choosed_group_options').hasClass( "active" )){
+  }else {
+    $('#choosed_group_options').addClass("active");
+  }
+    $('#choosed_group_options_new').css('display', 'block');
+    doc_edit_id = $('#doc_id').val();
+    var user_type = "<%=escape_javascript(user_type.id.to_s)%>";
+    $(".new_file_content").load("/doc/index?edit_id=" + doc_edit_id + "&user_type_id=" + user_type);
+    $('#show_file_content_over').css('display', 'none');
+    var edit_content = $('#show_content').html();
+//          $(".editor").text("asdasdasd");
+//    $("button-save").show();
+});
+
+
+$(window).bind('keydown', function(event) {
+    if (event.ctrlKey || event.metaKey) {
+      switch (String.fromCharCode(event.which).toLowerCase()) {
+        case 'f':
+          event.preventDefault();
+          $(this).parent().toggleClass('fullscreen');
+          break;
+        case 'g':
+          event.preventDefault();
+          alert('ctrl-g');
+          break;
+        }
+    }
+});
+
+
+/* OPEN MENUS*/
+   $('.subject_boxes_container').on("click","img", function (e) {
+     e.preventDefault();
+     $('#page_content_header').text($(this).attr('id'));
+   });
+/* end */
+
+$('nav a').on("click", function(e){
+      e.preventDefault();
+if ($(this).attr("id") == "p1" ){
+  var p = $( ".page:eq( 0 )" );
+} else if($(this).attr("id") == "p2" ) {
+    var p = $( ".page:eq( 1 )" );
+} else if($(this).attr("id") == "p3" ) {
+    var p = $( ".page:eq( 2 )" );
+}else if($(this).attr("id") == "p4" ) {
+	 var p = $( ".page:eq( 3 )" );
+}
+
+var position = p.position();
+$('html, body').animate( { scrollLeft: position.left }, 500);
+});
+
+$('.subject_boxes_container img').click(function(e) {
+  e.preventDefault();
+  if (  $('#edit_active').val() == "true"){
+    if ($(this).attr("showit") == "true"){
+       $(this).attr("showit", "false");
+       $(this).fadeTo( "fast", 0.33 );
+     } else{
+       $(this).attr("showit", "true");
+       $(this).fadeTo( "fast", 1 );
+     }
+  }
+});
+
+$(".application_settings_main").on("click", ".button-save-application", function(e) {
+  e.preventDefault();
+  $('#edit_active').val("false");
+  $('.application_settings_main').find($('.button-save-application')).hide();
+  $('.application_settings_main').find($('.button-edit-application')).show();
+
+  $('.subject_boxes_container img').each(function () {
+  $(this).attr("class", "box");
+    if ($(this).attr("showit") == "false"){
+      $(this).hide();
+    }
+  });
+
+  var content = $('.subject_boxes_container').html();
+  var user_id = "<%=escape_javascript(current_user.id.to_s)%>";
+
+  $.ajax({
+       type: "POST",
+       url: "/application_settings",
+       data:{ content: content, user_id: user_id },
+       success:function(data){
+       }, error: function(XMLHttpRequest, textStatus, errorThrown) {
+         alert("Status: " + textStatus); alert("Error: " + errorThrown);
+       }
+     });
+});
+
+
+/* CLICK NEW DOKUMENT*/
+   $( ".doc_create_new" ).on("click", function(e) {
+     var user_type = "<%=escape_javascript(user_type.id.to_s)%>";
+     users_class = "<%=escape_javascript(users_class.id.to_s) %>";
+		 var doc_type_id = $('#page_content_header').text();
+     e.preventDefault();
+     if ($('#choosed_group_options').hasClass( "active" )){
+     }else {
+         $('#choosed_group_options').addClass("active");
+     }
+       $('#show_content').empty();
+			 //var doc_type_id = $('#page_content_header').text();
+       $('#choosed_group_options_new').css('display', 'block');
+       $(".new_file_content").load("/docs/index?doc_type=" +doc_type_id + "&user_type_id=" + user_type +'&class_groups=' + users_class);
+//$(".new_file_content_classes").load("public/features/choose_classes.html");
+       $('#page_content_header').text($(this).attr('id'));
+   });
+/* END */
+
+$( ".doc_view_templates").on("click", function(e) {
+	e.preventDefault();
+	if ($('#choosed_group_options').hasClass( "active" )){
+	}else {
+		$('#choosed_group_options').addClass("active");
+	}
+		$('.show_content_overall').css('display', 'none');
+		$('#choosed_group_options_template').css('display', 'block');  // $(".show_template_content").load("/doc/show_all/");
+		var document_subject =  $('#page_content_header').text();
+		$(".show_template_content").load("/doc/show_all?doc_type=" + $(this).attr("id")); // $(".new_file_content_classes").load("public/features/choose_classes.html");
+// $('#page_content_header').text($(this).attr('id'));
+});
+
+    $( ".doc_view_own").on("click", function(e) {
+     e.preventDefault();
+     if ($('#choosed_group_options').hasClass( "active" )){
+     }else {
+       $('#choosed_group_options').addClass("active");
+     }
+		   $('.show_content_overall').css('display', 'none');
+       $('#choosed_group_options_template').css('display', 'block');  // $(".show_template_content").load("/doc/show_all/");
+       var document_subject =  $('#page_content_header').text();
+       $(".show_template_content").load("/doc/show_all?document_subject=" + document_subject + "&doc_type=" + $(this).attr("id")); // $(".new_file_content_classes").load("public/features/choose_classes.html");
+   // $('#page_content_header').text($(this).attr('id'));
+   });
+
+
+   $(".button-back").on("click", function(e) {
+       $('#choosed_group_options').removeClass("active");
+     if ($('#choosed_group_options_new').is(":visible")){
+         $('.show_file_content').empty();
+         $('.show_file_content_over').hide();
+         $('.new_file_content').empty();
+         $('#choosed_group_options_new').css("display", "none");
+     }
+     if ($('#choosed_group_options_template').is(":visible")){
+         $('.show_file_content').empty();
+         $('.show_template_content').empty();
+         $('.show_file_content_over').hide();
+         $('#choosed_group_options_template').css("display", "none");
+     }
+    if ($('.show_file_content_over').is(":visible")){
+         $('.show_file_content').empty();
+         $('.show_template_content').empty();
+         $('.show_file_content_over').hide();
+         $('#choosed_group_options_template').css("display", "none");
+     }
+
+     });
+
+     $(".application_settings_main").on("click", ".button-edit-application", function(e) {
+       e.preventDefault();
+       $('#edit_active').val("true");
+       $('.application_settings_main').find($('.button-edit-application')).hide();
+       $('.application_settings_main').find($('.button-save-application')).show();
+     //     $('.button-save-application').show();
+     //     $('.button-edit-application').hide();
+       $('.subject_boxes_container img').each(function () {
+         $(this).attr("class", "click_disabled");
+         if ($(this).css('display') == 'none'){
+           $(this).css({ 'display' : ''});
+         }
+       });
+     });
+
+
+   $("#choosed_group_options").on("click", ".button-save", function(e) {
+     e.preventDefault();
+     var doc_type = $('#page_content_header').text();
+     var content = $('#textBox').html();
+     var choosed_classes = $('#choose_class').val();
+     $('#choose_class').val("");
+     var user_id = "<%=escape_javascript(current_user.id.to_s) %>";
+     var doc_headline = $('#doc_headline').val();
+
+     if($('#doc_id').val() != ""){
+       doc_id = $('#doc_id').val();
+       $.ajax({
+         url:'/doc/update_partial',
+         data:{ doc_content: content, user_id: user_id, doc_headline: doc_headline, doc_type:doc_type, choosed_value: choosed_classes, doc_id: doc_id},
+         type:"POST",
+         success:function(data){
+                 $(".new_file_content").empty();
+								 $('#choosed_group_options_new').hide();
+								 $('.show_file_content_over').show();
+								 $(".show_file_content").show();
+                 $(".show_file_content").load("/doc/show/");
+         }, error: function(XMLHttpRequest, textStatus, errorThrown) {
+         }
+       });
+     } else{
+       $.ajax({
+         url:'/doc/create_partial',
+         data:{ doc_content: content, doc_headline: doc_headline, user_id: user_id, doc_type:doc_type, choosed_value: choosed_classes},
+         type:"POST",
+         success:function(data){
+                 $(".new_file_content").empty();
+								 $('#choosed_group_options_new').hide();
+								 $('.show_file_content_over').show();
+								 $(".show_file_content").show();
+                 $(".show_file_content").load("/doc/show?data="+ data);
+         }, error: function(XMLHttpRequest, textStatus, errorThrown) {
+         }
+       });
+     }
+   });
+
+
+
+
+   function calendar(params) {
+     var days_labels = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'],
+         months_labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+     var days_in_month = getDaysInMonth(params.month, params.year),
+         first_day_date = new Date(params.year, params.month, 1),
+         first_day_weekday = first_day_date.getDay();
+
+     var prev_month = params.month == 0 ? 11 : params.month - 1,
+         prev_year = prev_month == 11 ? params.year - 1 : params.year,
+         prev_days = getDaysInMonth(prev_month, prev_year);
+
+     // calendar header
+     var html = '<h2>' + months_labels[params.month] + ' ' + params.year + '</h2>';
+
+     function getDaysInMonth(month, year) {
+       // 0 = last day of the previous month
+       return new Date(year, month + 1, 0).getDate();
+     }
+
+     // calendar content
+     html += '<table class="calendar-table">';
+
+     // week days labels
+     html += '<tr class="week-days">';
+     for (var i = 0; i <= 6; i++) {
+       html += '<td class="day">';
+       html += days_labels[i];
+       html += '</td>';
+     }
+     html += '</tr>';
+
+     var w = 0; // week day
+     var n = 1; // next days date
+     var c = 1; // current date
+
+     // dates loop
+     for (var i = 0; i < 6*days_labels.length; i++) {
+       if (w == 0) {
+         // first week's day
+         html += '<tr class="week">';
+       }
+
+       if (i < new Date(params.year, params.month, 1).getDay()) {
+         // previous month's day
+         html += '<td class="day other-month">' + (prev_days - first_day_weekday + i + 1) + '</td>';
+       } else if (c > days_in_month) {
+         // next month's day
+         html += '<td class="day other-month">' + n + '</td>';
+         n++;
+       } else {
+         // current month's day
+         var options = {weekday: "long", year: "numeric", month: "long", day: "numeric"};
+         var display_date = new Date(params.year, params.month, c);
+         html += '<td class="day" title="' + display_date.toLocaleDateString('en-GB', options) + '">' + c + '</td>';
+         c++;
+       }
+
+       if (w == days_labels.length - 1) {
+         // last week's day
+         html += '</tr>';
+         w = 0;
+       } else {
+         w++;
+       }
+     }
+
+     html += '</tr>';
+     return html;
+   }
+
+   var now = new Date();
+   var params = {
+     month: now.getMonth(),
+     year: now.getFullYear()
+   };
+   document.getElementById('calendar').innerHTML = calendar(params);
+
+
+
+</script>
+<script language="javascript" type="text/javascript">
+function scrollTo(element, to, duration) {
+  if (duration <= 0) return;
+    var difference = to - element.scrollLeft,
+    perTick = difference / duration * 10;
+    setTimeout(function() {
+      element.scrollLeft = element.scrollLeft + perTick;
+      if (element.scrollLeft === to) return;
+       scrollTo(element, to, duration - 10);
+    }, 10);
+}
+
+ var menuOpen = false;
+ var $a = document.querySelectorAll('nav a');
+ var $pages = document.querySelectorAll('.page');
+
+ document.querySelector('#menu').onclick = function() {
+   for (var i = 0; i < $pages.length; i++) {
+     $pages[i].children[0].style.transform = menuOpen ? 'scale(1)' :
+'scale(0.8)';
+   }
+   document.querySelector('nav').style.bottom = menuOpen ? '-48px' :
+   $pages[0].clientHeight * 0.05 + 'px';
+   menuOpen = !menuOpen;
+ };
+ for (var i = 0; i < $a.length; i++) {
+   (function(index){
+   $a[index].onclick = function() {
+     scrollTo(document.body, $pages[0].offsetWidth * index, 300);
+     document.querySelector('nav').style.left = 80 * (-index + 1) + 'px';
+     for (var j = 0; j < $a.length; j++) {
+       $a[j].classList.remove("current");
+     }
+     $a[index].classList.add("current");
+   };
+   })(i);
+ }
+ document.querySelector('section').ondblclick = function() {
+   document.querySelector('#menu').click();
+ };
+ var modalWindow = document.getElementById('modal');
+
+ document.addEventListener('click', function(ev) {
+   ev.stopPropagation();
+   ev.preventDefault();
+
+ // Boxes
+   if (ev.target.classList.contains('box')) {
+     modalWindow.classList.add('active');
+   }
+
+ // Modal close-button
+   if (ev.target.classList.contains('button-close')) {
+     modalWindow.classList.remove('active');
+   }
+
+ });
+/*
+function KeyPress(e) {
+    if  (document.getElementById("show_file_content_over").style.display != "none"){
+    var evtobj = window.event? event : e
+if (evtobj.keyCode == 90 && evtobj.ctrlKey) document.getElementById("Fullscreen_it").click();
+    }
+}
+
+document.onkeydown = KeyPress;
+*/
+
+
+
+function toggleFullScreen(elem) {
+
+if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+  if (elem.requestFullScreen) {
+    elem.requestFullScreen();
+  } else if (elem.mozRequestFullScreen) {
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullScreen) {
+    elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+} else {
+  if (document.cancelFullScreen) {
+    document.cancelFullScreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitCancelFullScreen) {
+    document.webkitCancelFullScreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+}
+
+</script>
+
+</body>
+</html>

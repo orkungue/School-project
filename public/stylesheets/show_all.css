@@ -1,0 +1,55 @@
+
+section {
+  width: 100%;
+  margin: 0 auto;
+}
+
+input {
+  width: 100%;
+  padding: 16px 8px;
+  font-size: 16px;
+  outline: none;
+  background-color: #E78584;
+  border: none;
+  color: #5C393D;
+}
+
+.List {
+  width: 100%;
+  margin: 2px 0;
+  margin-left: -40px;
+  list-style-type: none;
+
+}
+.List > li {
+  padding: 12px 8px;
+  background-color: #F2B7BD;
+  border-bottom: 1px solid #5C393D;
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+.List > li.is-hidden {
+  height: 0;
+  font-size: 0;
+  padding: 0;
+  border: none;
+  visibility: hidden;
+}
+
+.List .doc_filter_header{
+
+}
+
+::-webkit-input-placeholder {
+  color: #5C393D;
+}
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: #5C393D;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #5C393D;
+}

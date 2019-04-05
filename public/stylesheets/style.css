@@ -1,0 +1,418 @@
+body {
+  background: #fff;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+img {
+cursor: pointer;
+}
+#menu {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  right: 2%;
+  top: 2%;
+  z-index: 300;
+  display: block;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font: italic 24px/48px georgia;
+  cursor: pointer;
+  background: #fff;
+  text-decoration: none;
+  color: #000;
+}
+#menu:hover {
+  background:#000;
+  color:#fff;
+}
+nav {
+  position: fixed;
+  width: 100%;
+  height: 48px;
+  bottom: -48px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 100;
+  text-align: center;
+  transition: bottom 0.15s, left 0.3s;
+}
+nav a {
+  display: inline-block;
+  width: 120px;
+  font: 16px/48px arial;
+  color: #000;
+  text-decoration: none;
+}
+nav a:hover, nav a.current {
+  color: #f00;
+}
+
+.page {
+  position: absolute;
+  width: 100%;
+  height: 102%;
+  margin-top: -3%;
+}
+.section {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin-top: -0.5%;
+  margin-left: -0.5%;
+}
+#i1 {
+  left: 0%;
+}
+#i2 {
+  left: 100%;
+}
+#i3 {
+  left: 200%;
+}
+#i4 {
+  left: 300%;
+}
+.page>div {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 25%;
+  transition: transform 0.15s;
+}
+#i1>div {
+    background: rgba(255, 206, 84, 0.5);
+    -pie-background:  rgba(255, 206, 84, 0.5);
+    behavior: url(PIE.htc);
+}
+#i2>div {
+    background: rgba(140, 193, 82, 0.5);
+    -pie-background:  rgba(140, 193, 82, 0.5);
+    behavior: url(PIE.htc);
+}
+#i3>div {
+    background: rgba(79, 193, 233, 0.5);
+    -pie-background:  rgba(79, 193, 233, 0.5);
+    behavior: url(PIE.htc);
+}
+#i4>div {
+    background: rgba(233, 115, 79, 0.5);
+    -pie-background:  rgba(233, 115, 79, 0.5);
+    behavior: url(PIE.htc);
+}
+.inner_content{
+  z-index: 100;
+  position: absolute;
+  margin-top: 100px;
+}
+.page_content_header{
+  font-size: 35px;
+  width: auto;
+  height: 5%;
+  margin-top: 3%;
+  left: 35%;
+  position: absolute;
+}
+.page_content{
+   width: 80%;
+   min-width: 80%;
+   max-width: 80%;
+   height: 70%;
+   max-height: 70%;
+   max-height: 70%;
+   margin: 5% auto;
+   float: left;
+   display: block;
+}
+.subject_content{
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  margin-top: 5%;
+}
+.subject_boxes_container img{
+  height: 24%;
+  width: 24%;
+}
+.box {
+  width: 200px;
+  height: 200px;
+}
+.box:hover {
+  cursor: pointer;
+}
+
+#modal {
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 206, 84, 1);
+  transform: scale(0.9);
+  transition: transform 0.4s, opacity 0.4s, visibility 0.4s;
+  z-index: 101;
+}
+#modal.active {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transition: transform 0.4s, opacity 0.4s;
+  z-index: 101;
+}
+
+.page .button-close, .page .button-back {
+  position: absolute;
+  left: 30px;
+  top: 30px;
+/*  height: auto;
+  width: 40px; */
+  cursor: pointer;
+  font-size: 30px;
+  z-index: 111;
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+}
+.button-back, .button-save, .button-close, button-edit{
+ width: 100px;
+ height: 80px;
+}
+.button-back img, .button-save img, button-edit img, .button-close img{
+ width: 100%;
+ height: 100%;
+}
+
+.page_content_subject{
+  width: auto;
+  height: auto;
+  margin-top: 20%;
+  float: left;
+  margin-left: 17%;
+  margin-right: 17%;
+  display: block;
+}
+.page_content_subject img{
+    cursor: pointer;
+    padding: 1px 5px 5px 5px;
+    width: 30%;
+    height: 30%;
+}
+
+#choosed_group_options {
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 206, 84, 1) !important;
+  transform: scale(0.9);
+  transition: transform 0.4s, opacity 0.4s, visibility 0.4s;
+  z-index: 101;
+}
+#choosed_group_options.active {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transition: transform 0.4s, opacity 0.4s;
+  z-index: 101;
+}
+.choosed_group_options > div{
+z-index: 200;
+}
+
+.application_settings{
+  height: 50px;
+  background-color: #f6dda0;
+  position: fixed;
+  margin-top: -50px;
+  width: 80%;
+}
+.application_settings div{
+  height: 50px;
+  width: 50px;
+}
+.application_settings div img{
+  margin-left: -15px;
+  width: 150%;
+  height: 100%;
+}
+.show_content{
+  background: #fafafa;
+  border-radius 8px;
+  box-shadow: 0 5px 8px 0 rgba(0,0,0,.4);
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0 auto;
+  margin-top: 4%;
+  border: 1px solid black;
+}
+.content_setting_bar .noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+.content_setting_bar .multiselect {
+    width: 170px;
+    font-size: 19px;
+    padding: 4px;
+    border-radius: 3px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: 0.2s;
+    outline: none;
+}
+.content_setting_bar .multiselect:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.content_setting_bar .multiselect.active {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom: 1px solid transparent;
+}
+.content_setting_bar .multiselect > .title {
+    cursor: pointer;
+    height: 16px;
+    padding: 6px;
+}
+.content_setting_bar .multiselect > .title > .text {
+    max-width: 130px;
+    max-height: 25px;
+    display: block;
+    float: left;
+    overflow: hidden;
+    line-height: 1.3em;
+}
+.content_setting_bar .multiselect > .title > .expand-icon,
+.content_setting_bar .multiselect > .title > .close-icon {
+    float: right;
+    border-radius: 50%;
+    padding: 0 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+    transition: 0.1s;
+    display: none;
+}
+.content_setting_bar .multiselect.selection > .title > .expand-icon {
+    display: none;
+}
+.content_setting_bar .multiselect > .title > .expand-icon,
+.content_setting_bar .multiselect.selection > .title > .close-icon {
+    display: block;
+}
+.content_setting_bar .multiselect > .title > .close-icon:hover {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: rgb(203, 32, 32);
+    color: #fff;
+}
+.content_setting_bar .multiselect > .multi_container {
+    max-height: 200px;
+    overflow: auto;
+    margin-top: 4px;
+    margin-left: -1px;
+    width: 170px;
+    transition: 0.1s;
+    position: absolute;
+    z-index: 99;
+    background: #fff;
+    border: 1px solid transparent;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.content_setting_bar .multiselect.active > .multi_container {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-top: 0;
+}
+.content_setting_bar .multiselect:hover > .multi_container {
+    border-top-color: rgba(0, 0, 0, 0.3);
+}
+.content_setting_bar .multiselect.active:hover > .multi_container {
+    border-color: rgba(0, 0, 0, 0.3);
+}
+.content_setting_bar .multiselect > .multi_container > option {
+    display: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.1s;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+.content_setting_bar .multiselect > .multi_container > option.selected {
+    background: rgb(122, 175, 233);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+.content_setting_bar .multiselect > .multi_container > option:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+.content_setting_bar .multiselect.active > .multi_container > option {
+    display: block;
+}
+.choose_classes{
+  position: absolute;
+  min-height: 100px;
+  height: 100px;
+  width: 300px;
+}
+.show_file_content_doc_header{
+  display: table;
+  margin: 0 auto;
+}
+@import url(https://fonts.googleapis.com/css?family=Lato:300);
+#calendar {
+  width: 100%;
+  margin: 18% 10%;
+}
+#calendar h2 {
+  line-height: 170px;
+  margin: 0;
+  font-weight: 300;
+  color: #000;
+  background: #e9734f;
+  text-align: center;
+}
+#calendar table {
+  width: 100%;
+  margin-top: -42px;
+  border-collapse: collapse;
+}
+#calendar .week-days {
+  color: #fff;
+}
+#calendar .day {
+  width: 70px;
+  height: 40px;
+  text-align: center;
+}
+#calendar .week .day {
+  background: #eee;
+}
+#calendar .week .day:not(.other-month):hover {
+  color: #fff;
+  background: #e9734f;
+}
+#calendar .other-month {
+  opacity: 0.5;
+}
+p {
+  text-align: center;
+}
+.slider { overflow: hidden; }
+.slider section { position: relative; }
+.slider section .page { float: left; }

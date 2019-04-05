@@ -1,0 +1,210 @@
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+<style>
+.multi__select {
+  padding: 5px;
+  border: 1px solid grey;
+  border-radius: 3px;
+  transition: all 500ms;
+  width: 100%;
+  position: relative;
+  overflow: hidden auto;
+  margin: 4px 0 4px 0;
+}
+.multi__select input.placeholder {
+  border: none;
+  padding: 10px;
+  margin: -5px;
+  outline: none;
+}
+.multi__select input.placeholder:focus ~ .item__container {
+  opacity: 1;
+  visibility: visible;
+  transition: all 1s;
+  height: auto;
+}
+.multi__select .label {
+  padding: 4px;
+  background: gray;
+  color: white;
+  border-radius: 4px;
+  margin-left: 2px;
+  position: relative;
+  cursor: pointer;
+}
+.multi__select .item__container {
+  position: absolute;
+  margin-top: 5px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 500ms;
+  height: 0;
+  border: 1px solid grey;
+  width: 97%;
+  padding: 10px;
+  z-index: 1;
+  background: gainsboro;
+}
+.multi__select .item__container .checkall {
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.multi__select .item__container .option__item {
+  padding: 2px;
+}
+.multi__select:hover .item__container {
+  opacity: 1;
+  visibility: visible;
+  transition: all 500ms;
+  height: auto;
+}
+
+.form-control {
+  word-wrap: wrap;
+}
+
+</style>
+
+
+<select name="browser" class="browser" id="browser">
+  <option value="0">Internet Explorer</option>
+  <option value="1">Chrome</option>
+  <option value="2">Mozila FireFox</option>
+</select>
+<div class="actions"></div>
+
+<script>
+(function($) {
+  (function() {
+    $.fn.listOptions = function(defaults) {
+      var $this = $(this);
+      $this.each(function(index) {
+        var $$this = $($this[index]),
+          $options = $$this.children('option'),
+          $checkall = $('<div>').addClass('checkall').text(defaults.checkAllText),
+          $id = defaults.id + '' + (index ? index : '');
+        var $input_search = $('<input/>').addClass("placeholder")
+          .attr("type", defaults.inputType)
+          .attr('placeholder', defaults.inputPlaceholder),
+          $item_container = $('<div>').addClass("item__container").append($checkall),
+          //.slideUp(0),
+          $list = $('<div>').attr('id', $id).addClass("multi__select " + defaults.classList)
+          .css('direction', defaults.direction)
+          .append($input_search).append($item_container);
+        $list.on('click', function(e) {
+          //$item_container.slideToggle();
+        });
+        $options.each(function(element) {
+          $list.children('.item__container').append(
+            $('<div>').addClass("option__item").append(
+              $('<label>').text($options[element].outerText).prepend(
+                $('<input/>').attr('type', defaults.optionType)
+                .attr('value', $options[element].value)
+                .attr('name', 'optionList')
+              )
+            )
+          );
+        });
+
+        var $opt_item = $list.find('.option__item'),
+          $placeholder = $list.find('input.placeholder'),
+          $checkbox = $list.find('input:' + defaults.optionType),
+          $label = $list.find('label'),
+          $txtVal = $placeholder.val();
+        $checkall.on('click', function() {
+          $checkbox.filter(function(index) {
+            if ($($checkbox[index]).parent().css('display') != 'none'){
+              console.log($checkbox[index].style.display);
+              return $checkbox[index]
+            }
+          }).prop('checked', !$checkbox.prop('checked'));
+          $checkbox.prop('checked') ?
+            $checkall.text(defaults.clearAllText) : $checkall.text(defaults.checkAllText);
+          !$checkbox.prop('checked') ? defaults.onClearAll() : defaults.onCheckAll();
+        });
+        $checkbox.on('change', function() {
+          if ($(this).prop('checked') == true && defaults.showSelectedLabel) {
+            $placeholder.parent().append(
+              $('<span>').addClass("label").attr('data-val', $(this).val()).text($(this).parent('label').text())
+            );
+          } else {
+            $placeholder.parent()
+              .children('span[data-val="' + $(this).val() + '"]').remove();
+          }
+          if ((defaults.optionType == 'radio')) {
+            $placeholder.parent()
+              .children('span[data-val!="' + $(this).val() + '"]').remove();
+          }
+        });
+        $placeholder.on('keyup', function(e) {
+          var $this_val = $(this).val().toLowerCase();
+          $label.each(function(index) {
+            if ($label[index].textContent.toLowerCase().indexOf($this_val) >= 0) {
+              $label[index].style.display = 'block';
+            } else {
+              $label[index].style.display = 'none';
+            }
+          });
+        });
+        $placeholder.parent().delegate('span.label', 'click', function() {
+          var $val = $(this).attr('data-val');
+          $checkbox.filter(function(index) {
+            if ($checkbox[index].value == $val) {
+              $checkbox[index].click(); //checked = false;
+              return;
+            }
+          });
+          $(this).remove();
+        });
+        $checkbox.on('click', defaults.onClick);
+        $checkbox.on('change', defaults.onChange);
+        $$this.parent().append($list);
+        $$this.remove();
+      });
+    };
+  })();
+  var defaults = {
+      id: 'list',
+      class: 'options',
+      inputType: 'search',
+      inputPlaceholder: 'Enter Text for Filter Options',
+      showSelectedLabel: true,
+      optionType: 'checkbox',
+      direction: 'rtl'
+    },
+    $actions = $('.actions'),
+    $count = 0;
+  $(".browser").listOptions({
+    id: 'list',
+    classList: 'options', //example: classname1 classname2 ...
+    inputType: 'search',
+    inputPlaceholder: 'Enter text for search',
+    showSelectedLabel: true,
+    optionType: 'checkbox',
+    direction: 'ltr',
+    checkAllText: 'Select All',
+    clearAllText: 'Clear All',
+    onClick: function() {
+
+    },
+    onCheckAll: function() {
+      $actions.text('Checked');
+    },
+    onClearAll: function() {
+      $actions.text('Cleared');
+    },
+    onChange: function() {
+      $actions.text($(this).parent().text() + 
+                    ' : value:' + $(this).val() + 
+                    ', Checked:' + $(this).prop('checked')+
+                    ', Count: '+ ($(this).prop('checked') ? ++$count : --$count));
+    }
+  });
+}(jQuery));
+</script>
+
+</body>
+</html>
+

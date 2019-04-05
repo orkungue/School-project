@@ -1,0 +1,212 @@
+<html>
+<head>
+
+<style>
+
+
+.timetable_wrapper {
+   width: 70%;
+   margin: 60px auto 0;
+   background: #fafafa;
+/*   border-radius: 8px 0px 0px 8px;
+   -moz-border-radius: 8px 0px 0px 8px;
+   -webkit-border-radius: 8px 0px 0px 8px;*/
+   border-radius 8px;
+   box-shadow: 0 5px 8px 0 rgba(0,0,0,.4);
+   margin: 18% 10%;
+   width: 100%;
+
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 300;
+ border-collapse: collapse;
+}
+table caption {
+  text-align: left;
+  font-size: 1.5em;
+  padding: 0.35em;
+}
+table tr {
+border-bottom: 1px solid black;
+  height: 2.85em;
+}
+table tr:last-child {
+border-bottom: 0px solid black;
+}
+
+table td, table th {
+  text-align: center;
+  background: #FAFAFA;
+}
+table th {
+  font-weight: 400;
+}
+
+</style>
+<%
+  current_user = User.find(session[:current_user]).class_id
+  tt_content = Timetable.where("class_id = ?", current_user) rescue nil
+%>
+</head>
+
+<body>
+
+<div class="timetable_wrapper">
+						<% if User.find(session[:current_user]).user_type_id != 3 %>
+						<div class="application_settings application_settings_tt">
+							<div class="button-edit-application" style="display: block;"><img src="/images/main/edit-button.png"></div>
+							<div class="button-save-application" style="display: none;"><img src="/images/main/save-button.png"></div>
+							<input type="hidden" name="edit_active" id="edit_active"
+								value="false">
+						</div>
+						<% end %>
+<% if tt_content.blank? %>
+  <table class="timetable_table">
+    <caption></caption>
+    <tr>
+      <th>Zeit</th>
+      <th>Montag</th>
+      <th>Dienstag</th>
+      <th>Mittwoch</th>
+      <th>Donnerstag</th>
+      <th>Freitag</th>
+    </tr>
+    <tr>
+      <th>8:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>9:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>10:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>11:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>12:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>13:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>14:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>15:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>16:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+    <tr>
+      <th>17:00 </th>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+      <td contenteditable="false"></td>
+    </tr>
+  </table>
+<% else %>
+  <table class="timetable_table">
+
+      <%= tt_content.first.timetable_content.html_safe %>
+  </table>
+<% end %>
+</div>
+<script>
+  $(document).ready(function(event) {
+   var user_id = <%= User.find(session[:current_user]).user_type_id %>;
+    if (user_id != 3){
+
+/* APPLICATION SETTINGS*/
+
+
+   $(".application_settings_tt").on("click", ".button-edit-application", function(e) {
+     e.preventDefault();
+      $('.application_settings_tt').find($('.button-save-application')).show();
+      $('.application_settings_tt').find($('.button-edit-application')).hide();
+      $('.timetable_wrapper').find('td').each(function() {
+		    $(this).prop('contenteditable', true );
+      });
+   });
+
+   $(".application_settings_tt").on("click", ".button-save-application", function(e) {
+     e.preventDefault();
+     $('.application_settings_tt').find($('.button-edit-application')).show();
+     $('.application_settings_tt').find($('.button-save-application')).hide();
+     $('.timetable_wrapper').find('td').each(function() {
+		    $(this).prop('contenteditable', false );
+     });
+
+     var content = $('.timetable_table').html();
+     var user_id = <%= session[:current_user].to_s %>;
+     $.ajax({
+       url:'/timetable/update_partial',
+       data:{ content: content, user_id: user_id},
+       type:"POST",
+       success:function(data){
+       }, error: function(XMLHttpRequest, textStatus, errorThrown) {
+         alert("Status: " + textStatus); alert("Error: " + errorThrown);
+       }
+     });
+   });
+
+
+
+    }
+});
+
+</script>
+
+</body>
+</html>

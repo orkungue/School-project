@@ -1,0 +1,2 @@
+class DocGroup < ApplicationRecord
+end
